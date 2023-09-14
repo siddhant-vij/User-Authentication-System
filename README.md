@@ -20,6 +20,7 @@ A terminal-based user authentication system designed to showcase registration, l
 - **Forgot Password Mechanism**: Offer a mechanism for users to recover their password if forgotten.
 - **Delete Account Option**: Allow users to delete their account and all associated data.
 - **Lockout Mechanism**: Deter brute-force attempts by locking out after consecutive incorrect password attempts.
+- **Session Management**: A timeout mechanism that logs out the user after a certain period of inactivity.
 
 ## Contributing
 
@@ -42,7 +43,6 @@ Contributions are what make the open-source community such an amazing place to l
 
 ## Future Improvements
 
-- **Session Management**: A timeout mechanism that logs out the user after a certain period of inactivity.
 - **Audit Log**: Maintain a log of all authentication activities for monitoring and security purposes.
 - **Multi-Factor Authentication**: Introduce an option for users to enable additional security layers for logging in.
 - **Backup and Recovery**: Design a backup mechanism to safeguard user data and ensure recovery options in case of system failures.
