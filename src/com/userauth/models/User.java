@@ -9,13 +9,18 @@ public class User {
     private final String hashedPassword;
     private final String securityQuestion;
     private final String securityAnswer;
+    private final String secretKey;
+    private final String email;
 
-    public User(String id, String username, String hashedPassword, String securityQuestion, String securityAnswer) {
+    public User(String id, String username, String email, String hashedPassword, String securityQuestion,
+            String securityAnswer, String secretKey) {
         this.id = id;
         this.username = username;
+        this.email = email;
         this.hashedPassword = hashedPassword;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
+        this.secretKey = secretKey;
     }
 
     public String getId() {
@@ -38,8 +43,16 @@ public class User {
         return securityAnswer;
     }
 
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
     public List<String> toCSV() {
-        return Arrays.asList(id, username, hashedPassword, securityQuestion, securityAnswer);
+        return Arrays.asList(id, username, email, hashedPassword, securityQuestion, securityAnswer, secretKey);
     }
 
     public static User fromCSV(List<String> csvRecord) {
@@ -48,6 +61,8 @@ public class User {
                 csvRecord.get(1),
                 csvRecord.get(2),
                 csvRecord.get(3),
-                csvRecord.get(4));
+                csvRecord.get(4),
+                csvRecord.get(5),
+                csvRecord.get(6));
     }
 }

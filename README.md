@@ -22,6 +22,7 @@ A terminal-based user authentication system designed to showcase registration, l
 - **Lockout Mechanism**: Deter brute-force attempts by locking out after consecutive incorrect password attempts.
 - **Session Management**: A timeout mechanism that logs out the user after a certain period of inactivity.
 - **Audit Log**: Maintain a log of all authentication activities for monitoring and security purposes.
+- **Multi-Factor Authentication**: Introduce an option for users to enable additional security layers for logging in.
 
 ## Contributing
 
@@ -44,7 +45,6 @@ Contributions are what make the open-source community such an amazing place to l
 
 ## Future Improvements
 
-- **Multi-Factor Authentication**: Introduce an option for users to enable additional security layers for logging in.
 - **Backup and Recovery**: Design a backup mechanism to safeguard user data and ensure recovery options in case of system failures.
 - **Transition to a Relational Database**: Migrate from a CSV-based system to a more robust relational database like PostgreSQL or MySQL for better scalability, performance, and security.
 - **Database Backup**: Implement routine backups of the database to ensure data safety in case of unexpected failures.

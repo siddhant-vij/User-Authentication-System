@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import com.userauth.models.User;
 import com.userauth.utils.PasswordHasher;
-import com.userauth.utils.AuditLogger; // Import the AuditLogger
+import com.userauth.utils.AuditLogger;
 
 public class PasswordController {
   private final AuthController authController;
@@ -84,9 +84,11 @@ public class PasswordController {
     User updatedUser = new User(
         users.get(userIndex).getId(),
         users.get(userIndex).getUsername(),
+        users.get(userIndex).getEmail(),
         hashedNewPassword,
         users.get(userIndex).getSecurityQuestion(),
-        users.get(userIndex).getSecurityAnswer());
+        users.get(userIndex).getSecurityAnswer(),
+        users.get(userIndex).getSecretKey());
     users.set(userIndex, updatedUser);
     authController.userHandler.writeCSV(users.stream().map(User::toCSV).collect(Collectors.toList()));
     return true; // Password reset successful
