@@ -45,10 +45,22 @@ Contributions are what make the open-source community such an amazing place to l
 
 ## Future Improvements
 
-- **Backup and Recovery**: Design a backup mechanism to safeguard user data and ensure recovery options in case of system failures.
+- **MFA Add-Ons**: Allow users to turn off MFA Option and generate backup codes for users in case they can't access their authentication app.
 - **Transition to a Relational Database**: Migrate from a CSV-based system to a more robust relational database like PostgreSQL or MySQL for better scalability, performance, and security.
-- **Database Backup**: Implement routine backups of the database to ensure data safety in case of unexpected failures.
+- **Database Backup and Recovery**: Design a backup mechanism & implement routine backups of the database to safeguard user data and ensure recovery options in case of unexpected system failures.
 - **Data Validation and Sanitization**: Enhance the system to validate and sanitize inputs more thoroughly to protect against SQL injection and other potential threats, especially if moving to a more complex database system.
+- **API Integration**: Allow integration with other systems by developing RESTful APIs. This would enable the user authentication system to be used as a service by other applications.
+- **Rate Limiting**: Introduce rate limiting to prevent abuse from a single IP or user, especially during login or registration processes.
+- **Email Integration**: Send email notifications for important activities like password reset, account deletion, or suspicious activity alerts. This can also include a verification email upon registration.
+- **User Profiles**: Expand the system to allow users to have profiles where they can update their personal information, profile pictures, etc.
+- **OAuth & Social Media Logins**: Allow users to log in using their social media accounts or through OAuth providers like Google, Facebook, etc.
+- **Advanced Security Features**: Introduce more advanced security features such as device fingerprinting, geolocation-based access controls, and machine learning-driven anomaly detection for suspicious activities.
+- **UI/UX Improvements**: Transition from a CLI-based system to a web-based interface with a user-friendly design, enhancing the user experience.
+- **Logging & Monitoring**: Implement a more comprehensive logging and monitoring solution. Integrate with platforms like ELK stack (Elasticsearch, Logstash, and Kibana) or Graylog to monitor and analyze system logs in real-time.
+- **Scalability**: Design the system for high availability and ensure that it can handle a large number of simultaneous concurrent users.
+- **User Role & Permissions**: Introduce user roles and permissions, allowing for different levels of access based on the role assigned to a user.
+- **Integration with CAPTCHA**: To prevent bots from abusing the registration or login processes, integrate CAPTCHA challenges.
+- **Two-Way Encryption**: For sensitive data, implement two-way encryption techniques to ensure data privacy and security.
 
 
 ## License
