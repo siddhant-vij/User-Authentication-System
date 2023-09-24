@@ -7,6 +7,7 @@ import com.userauth.controllers.PasswordController;
 import com.userauth.controllers.RegisterController;
 import com.userauth.controllers.SessionController;
 import com.userauth.models.User;
+import com.userauth.utils.AuditLogger;
 
 public class UserAuthenticationSystem {
   private LoginController loginController;
@@ -48,6 +49,7 @@ public class UserAuthenticationSystem {
       String choice = sessionController.handleSessions();
       switch (choice) {
         case "1":
+          AuditLogger.logActivity("SYSTEM", "Registration Initiated", "SUCCESS", "User chose to Register");
           if (currentUser == null) {
             registerController.register();
           } else {
@@ -57,16 +59,21 @@ public class UserAuthenticationSystem {
 
         case "2":
           if (currentUser == null) {
+            AuditLogger.logActivity("SYSTEM", "Login Initiated", "SUCCESS", "User chose to Login");
             currentUser = loginController.login(currentUser);
           } else {
+            AuditLogger.logActivity(currentUser.getUsername(), "Password Reset Initiated", "SUCCESS",
+                "User chose to Reset Password");
             passwordController.resetPassword(currentUser.getUsername());
           }
           break;
 
         case "3":
           if (currentUser == null) {
+            AuditLogger.logActivity("SYSTEM", "Forgot Password Initiated", "SUCCESS", "User chose Forgot Password");
             passwordController.forgotPassword();
           } else {
+            AuditLogger.logActivity(currentUser.getUsername(), "Logout Initiated", "SUCCESS", "User chose to Logout");
             currentUser = null; // Logout
             System.out.println("Successfully logged out!");
           }
@@ -74,9 +81,12 @@ public class UserAuthenticationSystem {
 
         case "4":
           if (currentUser == null) {
+            AuditLogger.logActivity("SYSTEM", "System Exit", "SUCCESS", "User chose to Quit the application");
             System.out.println("Goodbye!");
             System.exit(0); // Quit the application
           } else {
+            AuditLogger.logActivity(currentUser.getUsername(), "Account Deletion Initiated", "SUCCESS",
+                "User chose to Delete Account");
             currentUser = deletionController.deleteAccount(currentUser.getUsername());
           }
           break;

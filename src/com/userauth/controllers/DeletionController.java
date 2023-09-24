@@ -2,6 +2,7 @@ package com.userauth.controllers;
 
 import com.userauth.models.User;
 import com.userauth.utils.PasswordHasher;
+import com.userauth.utils.AuditLogger;
 
 public class DeletionController {
   private final AuthController authController;
@@ -27,9 +28,11 @@ public class DeletionController {
         passwordDelete, existingUser.getHashedPassword())) {
       authController.deleteUserByUsername(usernameDelete);
       System.out.println("Account successfully deleted!");
+      AuditLogger.logActivity(usernameDelete, "ACCOUNT_DELETION", "SUCCESS", "User account deleted successfully.");
       return null;
     } else {
       System.out.println("Incorrect password. Account deletion aborted.");
+      AuditLogger.logActivity(usernameDelete, "ACCOUNT_DELETION", "FAILURE", "User account deleted aborted due to incorrect password.");
       return existingUser;
     }
   }

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.userauth.models.User;
 import com.userauth.utils.PasswordHasher;
+import com.userauth.utils.AuditLogger; // Import the AuditLogger
 
 public class RegisterController {
   private final AuthController authController;
@@ -18,10 +19,12 @@ public class RegisterController {
     String username = authController.getInput("Enter username: ");
     if (username == null || authController.findUserByUsername(username) != null) {
       System.out.println("Username already exists or is invalid. Try another one.");
+      AuditLogger.logActivity(username, "REGISTER", "FAILURE", "Username already exists or is invalid.");
       return;
     }
     if (username.trim().isEmpty()) {
       System.out.println("Blank username not allowed. Try another one.");
+      AuditLogger.logActivity(username, "REGISTER", "FAILURE", "Blank username not allowed.");
       return;
     }
 
@@ -54,6 +57,7 @@ public class RegisterController {
     registerUser(username, password, securityQuestion, securityAnswer);
 
     System.out.println("Successfully registered!");
+    AuditLogger.logActivity(username, "REGISTER", "SUCCESS", "User registered successfully.");
   }
 
   private boolean registerUser(String username, String password, String securityQuestion,

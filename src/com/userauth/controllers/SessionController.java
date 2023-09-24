@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.userauth.models.User;
+import com.userauth.utils.AuditLogger;
 
 public class SessionController {
   private final Supplier<User> currentUserSupplier;
@@ -81,10 +82,14 @@ public class SessionController {
       System.out.println("\nSession timed out due to inactivity...");
       if ("LOGGED_IN".equals(getUserState())) {
         System.out.println("You've been logged out!");
+        AuditLogger.logActivity(currentUserSupplier.get().getUsername(), "SESSION", "TIMEOUT",
+            "User session timed out due to inactivity and user was logged out.");
         setCurrentUserConsumer.accept(null);
         setUserState("LOGGED_OUT");
       } else {
         System.out.println("Exiting system!");
+        AuditLogger.logActivity("null", "SESSION", "TIMEOUT",
+            "System exited due to user inactivity. Logged out to System Exit.");
         System.exit(0);
       }
     }

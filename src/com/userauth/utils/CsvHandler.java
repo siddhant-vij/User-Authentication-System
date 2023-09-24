@@ -37,6 +37,8 @@ public class CsvHandler {
             }
             return result;
         } catch (IOException | CsvException e) {
+            System.out.println("Error occurred while reading the CSV file.");
+            AuditLogger.logActivity("SYSTEM", "CSV_READ", "FAILURE", "Error occurred while reading the CSV file.");
             throw new RuntimeException(e);
         }
     }
@@ -49,6 +51,8 @@ public class CsvHandler {
             }
             writer.writeAll(dataToWrite);
         } catch (IOException e) {
+            System.out.println("Error occurred while writing to the CSV file.");
+            AuditLogger.logActivity("SYSTEM", "CSV_WRITE", "FAILURE", "Error occurred while writing to the CSV file.");
             throw new RuntimeException(e);
         }
     }

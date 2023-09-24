@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.userauth.models.User;
 import com.userauth.utils.PasswordHasher;
+import com.userauth.utils.AuditLogger; // Import the AuditLogger
 
 public class PasswordController {
   private final AuthController authController;
@@ -18,6 +19,8 @@ public class PasswordController {
       usernameReset = authController.getInput("Enter username for password reset: ");
       if (usernameReset == null) {
         System.out.println("Username input is invalid.");
+        AuditLogger.logActivity(usernameReset, "PASSWORD_RESET", "FAILURE",
+            "Invalid username input for password reset.");
         return;
       }
     }
@@ -25,6 +28,7 @@ public class PasswordController {
     User existingUser = authController.findUserByUsername(usernameReset);
     if (existingUser == null) {
       System.out.println("Username doesn't exist.");
+      AuditLogger.logActivity(usernameReset, "PASSWORD_RESET", "FAILURE", "Username doesn't exist for password reset.");
       return;
     }
 
@@ -53,6 +57,7 @@ public class PasswordController {
 
     resetPwd(usernameReset, newPassword);
     System.out.println("Password successfully reset!");
+    AuditLogger.logActivity(usernameReset, "PASSWORD_RESET", "SUCCESS", "Password reset successfully.");
   }
 
   private boolean resetPwd(String username, String newPassword) {
@@ -91,12 +96,14 @@ public class PasswordController {
     String username = authController.getInput("Enter your username: ");
     if (username == null) {
       System.out.println("Username input is invalid. Try another one.");
+      AuditLogger.logActivity(username, "FORGOT_PASSWORD", "FAILURE", "Invalid username input for forgot password.");
       return;
     }
 
     User user = authController.findUserByUsername(username);
     if (user == null) {
       System.out.println("Username doesn't exist.");
+      AuditLogger.logActivity(username, "FORGOT_PASSWORD", "FAILURE", "Username doesn't exist for forgot password.");
       return;
     }
 
@@ -110,6 +117,7 @@ public class PasswordController {
       resetPassword(username);
     } else {
       System.out.println("Incorrect answer. Please try again.");
+      AuditLogger.logActivity(username, "FORGOT_PASSWORD", "FAILURE", "Incorrect security answer provided.");
     }
   }
 }

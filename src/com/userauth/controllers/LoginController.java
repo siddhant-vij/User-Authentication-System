@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.userauth.models.User;
 import com.userauth.utils.PasswordHasher;
+import com.userauth.utils.AuditLogger; // Import the AuditLogger
 
 public class LoginController {
   private final AuthController authController;
@@ -22,6 +23,7 @@ public class LoginController {
     String usernameLogin = authController.getInput("Enter username: ");
     if (usernameLogin == null || authController.findUserByUsername(usernameLogin) == null) {
       System.out.println("Username doesn't exist or is invalid.");
+      AuditLogger.logActivity(usernameLogin, "LOGIN", "FAILURE", "Username doesn't exist or is invalid.");
       return null;
     }
 
@@ -37,14 +39,17 @@ public class LoginController {
     if (user == null) {
       incrementFailedAttempts(username);
       System.out.println("User not found.");
+      AuditLogger.logActivity(username, "LOGIN", "FAILURE", "User not found.");
       return null;
     }
     if (!PasswordHasher.verifyPassword(password, user.getHashedPassword())) {
       incrementFailedAttempts(username);
       System.out.println("Invalid password.");
+      AuditLogger.logActivity(username, "LOGIN", "FAILURE", "Invalid password.");
       return null;
     } else {
       System.out.println("Successfully logged in!");
+      AuditLogger.logActivity(username, "LOGIN", "SUCCESS", "User logged in successfully.");
       resetFailedAttempts(username);
       return user;
     }
@@ -55,6 +60,7 @@ public class LoginController {
 
     if (failedAttempts.get(username) >= MAX_FAILED_ATTEMPTS) {
       lockoutEndTimes.put(username, LocalDateTime.now().plusMinutes(LOCKOUT_DURATION_MINUTES));
+      AuditLogger.logActivity(username, "LOGIN", "LOCKED", "Account locked after multiple failed attempts.");
     }
   }
 
