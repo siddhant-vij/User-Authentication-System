@@ -23,6 +23,7 @@ A terminal-based user authentication system designed to showcase registration, l
 - **Session Management**: A timeout mechanism that logs out the user after a certain period of inactivity.
 - **Audit Log**: Maintain a log of all authentication activities for monitoring and security purposes.
 - **Multi-Factor Authentication**: Introduce an option for users to enable additional security layers for logging in.
+- **Multi Factor Auth. Add-On**: Give users an option to enable/disable MFA during registration/post-login.
 
 ## Contributing
 
@@ -45,7 +46,6 @@ Contributions are what make the open-source community such an amazing place to l
 
 ## Future Improvements
 
-- **MFA Add-Ons**: Allow users to turn off MFA Option and generate backup codes for users in case they can't access their authentication app.
 - **Transition to a Relational Database**: Migrate from a CSV-based system to a more robust relational database like PostgreSQL or MySQL for better scalability, performance, and security.
 - **Database Backup and Recovery**: Design a backup mechanism & implement routine backups of the database to safeguard user data and ensure recovery options in case of unexpected system failures.
 - **Data Validation and Sanitization**: Enhance the system to validate and sanitize inputs more thoroughly to protect against SQL injection and other potential threats, especially if moving to a more complex database system.

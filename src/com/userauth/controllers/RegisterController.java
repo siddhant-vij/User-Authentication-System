@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import com.userauth.models.User;
 import com.userauth.utils.PasswordHasher;
 import com.userauth.utils.AuditLogger;
-import com.userauth.utils.MFAuthenticator;
 
 public class RegisterController {
   private final AuthController authController;
@@ -67,31 +66,24 @@ public class RegisterController {
       return;
     }
 
-    // Generate a secret key for TOTP
-    String secretKey = MFAuthenticator.generateSecretKey();
+    String mfaChoice = authController.getInput("Do you want to enable Multi-Factor Authentication (yes/no)? ");
+    boolean mfaEnabled = "yes".equalsIgnoreCase(mfaChoice);
 
-    // Generating the barcode URL for Google Authenticator
-    String companyName = "UserAuthSystem"; // Name of your company or application
-    String barCodeUrl = MFAuthenticator.getGoogleAuthenticatorBarCode(secretKey, email, companyName);
-
-    // Generating the QR code image. This will be saved in the project's data folder
-    String qrCodeFilePath = "data/QRCode_" + username + ".png";
-    try {
-      MFAuthenticator.createQRCode(barCodeUrl, qrCodeFilePath, 200, 200);
-      System.out.println("QR code generated at: " + qrCodeFilePath);
-      System.out.println("Please scan the QR code using your MFA app.");
-    } catch (Exception e) {
-      System.out.println("Failed to generate QR code. Please try registering again.");
-      AuditLogger.logActivity(username, "REGISTER", "FAILURE", "Failed to generate QR code.");
-      return;
+    String secretKey = "";
+    if (mfaEnabled) {
+      secretKey = authController.setupMFA(username, email);
+    } else {
+      System.out.println("Multi-Factor Authentication will not be enabled for this account.");
     }
 
-    registerUser(username, email, password, securityQuestion, securityAnswer, secretKey);
+    registerUser(username, email, password, securityQuestion, securityAnswer, secretKey, mfaEnabled);
 
     System.out.println("Successfully registered!");
 
-    System.out.println("Your MFA secret key is: " + secretKey);
-    System.out.println("Please set up your MFA app (Google Authenticator) using this key.");
+    if (mfaEnabled) {
+      System.out.println("Your MFA secret key is: " + secretKey);
+      System.out.println("Please set up your MFA app (Google Authenticator) using this key.");
+    }
 
     AuditLogger.logActivity(username, "REGISTER", "SUCCESS", "User registered successfully.");
   }
@@ -102,7 +94,7 @@ public class RegisterController {
   }
 
   private boolean registerUser(String username, String email, String password, String securityQuestion,
-      String securityAnswer, String secretKey) {
+      String securityAnswer, String secretKey, boolean mfaEnabled) {
     User existingUser = authController.findUserByUsername(username);
     if (existingUser != null) {
       System.out.println("Username already exists.");
@@ -125,7 +117,8 @@ public class RegisterController {
         hashedPassword,
         securityQuestion,
         hashedSecurityAnswer,
-        secretKey);
+        secretKey,
+        mfaEnabled);
     List<User> users = authController.getUsers();
     users.add(newUser);
     authController.userHandler.writeCSV(users.stream().map(User::toCSV).collect(Collectors.toList()));

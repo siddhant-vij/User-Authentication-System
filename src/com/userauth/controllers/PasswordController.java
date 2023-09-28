@@ -88,7 +88,8 @@ public class PasswordController {
         hashedNewPassword,
         users.get(userIndex).getSecurityQuestion(),
         users.get(userIndex).getSecurityAnswer(),
-        users.get(userIndex).getSecretKey());
+        users.get(userIndex).getSecretKey(),
+        users.get(userIndex).isMfaEnabled());
     users.set(userIndex, updatedUser);
     authController.userHandler.writeCSV(users.stream().map(User::toCSV).collect(Collectors.toList()));
     return true; // Password reset successful
