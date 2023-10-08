@@ -20,7 +20,7 @@ import com.userauth.utils.AuditLogger;
 public class SessionController {
 	private final Supplier<User> currentUserSupplier;
 	private final Consumer<User> setCurrentUserConsumer;
-	private static final Duration INACTIVITY_TIMEOUT = Duration.ofSeconds(10);
+	private static final Duration INACTIVITY_TIMEOUT = Duration.ofMinutes(3);
 	private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private final Runnable menuDisplayFunction;
 	private String userState; // "LOGGED_IN", "LOGGED_OUT"

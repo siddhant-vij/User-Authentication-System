@@ -63,6 +63,17 @@ public class LoginController {
 		AuditLogger.logActivity(username, "LOGIN", "SUCCESS", "User logged in successfully.");
 		resetFailedAttempts(username);
 
+		LocalDateTime lastLoginTime = user.getLastLoginTime();
+		if (lastLoginTime != null) {
+			System.out.println("\nLast successful login was on: " + lastLoginTime + "\n");
+		} else {
+			System.out.println("\nThis is your first login.\n");
+		}
+
+		LocalDateTime currentLoginTime = LocalDateTime.now();
+		user.setLastLoginTime(currentLoginTime);
+		updateUserInCsv(user);
+
 		System.out.println("\nCurrent MFA Status: " + user.isMfaEnabled());
 		String mfaToggleChoice = authController
 				.getInput("\nDo you want to change your Multi-Factor Authentication setting (yes/no)? ");

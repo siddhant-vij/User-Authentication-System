@@ -1,5 +1,6 @@
 package com.userauth.models;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,6 +13,7 @@ public class User {
 	private final String securityAnswer;
 	private String secretKey;
 	private boolean mfaEnabled;
+	private LocalDateTime lastLoginTime;
 
 	public User(String id, String username, String email, String hashedPassword, String securityQuestion,
 			String securityAnswer, String secretKey, boolean mfaEnabled) {
@@ -49,9 +51,9 @@ public class User {
 		return secretKey;
 	}
 
-  public void setSecretKey(String secretKey) {
+	public void setSecretKey(String secretKey) {
 		this.secretKey = secretKey;
-  }
+	}
 
 	public String getEmail() {
 		return email;
@@ -65,13 +67,21 @@ public class User {
 		this.mfaEnabled = mfaEnabled;
 	}
 
+	public LocalDateTime getLastLoginTime() {
+		return lastLoginTime;
+	}
+
+	public void setLastLoginTime(LocalDateTime lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
+	}
+
 	public List<String> toCSV() {
 		return Arrays.asList(id, username, email, hashedPassword, securityQuestion, securityAnswer, secretKey,
-				String.valueOf(mfaEnabled));
+				String.valueOf(mfaEnabled), lastLoginTime == null ? "" : lastLoginTime.toString());
 	}
 
 	public static User fromCSV(List<String> csvRecord) {
-		return new User(
+		User user = new User(
 				csvRecord.get(0),
 				csvRecord.get(1),
 				csvRecord.get(2),
@@ -80,5 +90,13 @@ public class User {
 				csvRecord.get(5),
 				csvRecord.get(6),
 				Boolean.parseBoolean(csvRecord.get(7)));
+
+		String lastLoginTimeStr = csvRecord.get(8);
+
+		if (!lastLoginTimeStr.isEmpty()) {
+			user.setLastLoginTime(LocalDateTime.parse(lastLoginTimeStr));
+		}
+
+		return user;
 	}
 }
